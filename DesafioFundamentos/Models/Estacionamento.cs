@@ -1,10 +1,12 @@
+using System.Security.Cryptography.X509Certificates;
+
 namespace DesafioFundamentos.Models
 {
     public class Estacionamento
     {
         private decimal precoInicial = 0;
         private decimal precoPorHora = 0;
-        private List<string> veiculos = new List<string>();
+        private List<Car> veiculos = new List<Car>();
 
         public Estacionamento(decimal precoInicial, decimal precoPorHora)
         {
@@ -18,16 +20,16 @@ namespace DesafioFundamentos.Models
             string placa = Console.ReadLine();
 
             //Adiciona na lista
-            veiculos.Add(placa);
+            veiculos.Add(new Car(placa));
         }
 
         public void RemoverVeiculo()
         {
             Console.WriteLine("Digite a placa do veículo para remover:");
-            string placa = Console.ReadLine();
+            Car placa = new Car(Console.ReadLine());
 
             // Verifica se o veículo existe
-            if (veiculos.Any(x => x.ToUpper() == placa.ToUpper()))
+            if (veiculos.Any(x => x.LicensePlate.ToUpper() == placa.LicensePlate.ToUpper()))
             {
                 
                 Console.WriteLine("Digite a quantidade de horas que o veículo permaneceu estacionado:");
@@ -37,9 +39,9 @@ namespace DesafioFundamentos.Models
                 decimal valorTotal = precoInicial + precoPorHora * horas;
 
                 //Remove a placa digitada da lista de veículos
-                veiculos.Remove(placa);
-                
-                Console.WriteLine($"O veículo {placa} foi removido e o preço total foi de: R$ {valorTotal}");
+                veiculos.RemoveAll(x => x.LicensePlate == placa.LicensePlate);
+
+                Console.WriteLine($"O veículo {placa.LicensePlate} foi removido e o preço total foi de: R$ {valorTotal}");           
             }
             else
             {
@@ -57,7 +59,7 @@ namespace DesafioFundamentos.Models
                 //Realiza um laço de repetição, exibindo os veículos estacionados
                 foreach (var item in veiculos)
                 {
-                    Console.WriteLine(item);
+                    Console.WriteLine(item.LicensePlate);
                 }
             }
             else
